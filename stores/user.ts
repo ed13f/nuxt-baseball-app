@@ -6,18 +6,17 @@ export const useUserStore = defineStore('user', {
       email: '',
       isLoggedIn: false,
     }),
-  
     actions: {
       login(name: string, email: string) {
         this.name = name
         this.email = email
         this.isLoggedIn = true
       },
-  
       logout() {
         this.name = ''
         this.email = ''
         this.isLoggedIn = false
       },
     },
+    persist: true, 
   })
