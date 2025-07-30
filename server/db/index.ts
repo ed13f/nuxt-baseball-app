@@ -19,5 +19,6 @@ const sqlite = new Database(dbPath)
 export const db = drizzle(sqlite, { schema })
 export const { users } = schema
 export const { players } = schema
+export const { teams } = schema
 
 

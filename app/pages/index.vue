@@ -12,10 +12,18 @@ console.log('user: ', user)
     <AuthCreateUserForm />
   </div>
   <div v-if="user.isLoggedIn">
-    <h1></h1>
+    <SectionsFullWidth>
+      <h1>{{ user.name }}'s' Profile Page</h1>
+      <Drawer buttonText="Add Player">
+        <PlayersProfileForm />
+      </Drawer>
+      <Drawer buttonText="Add Team">
+        <TeamsCreateForm />
+      </Drawer>
+      <TeamsList />
+    </SectionsFullWidth>
     
-    <Drawer buttonText="Add Player">
-      <PlayersProfileForm />
-    </Drawer>
+    
+    
   </div>
 </template>
