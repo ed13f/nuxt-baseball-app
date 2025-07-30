@@ -1,12 +1,15 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { useTeams} from '../../../composables/teamsData'
   import { useTeamStore } from '../../../stores/team'
   import type { Team } from '../../../types/teams'
 
-  const { getAllTeams, deleteTeam } = useTeams()
+  const { deleteTeam, getAllTeams } = useTeamStore()
 
   const teams = ref<Team[]>([])
+  const selectedTeam = ref<Team | null>(null)
+
+  const isUpdateTeamDrawerOpen = ref(false)
+  
 
   onMounted(async () => {
       try {
@@ -21,12 +24,28 @@
     teams.value = await getAllTeams()
   }
 
+  function openTeamUpdateDrawer(team: Team) {
+    selectedTeam.value = team
+    console.log(team)
+    console.log('selectedTeam: ',selectedTeam.value);
+    isUpdateTeamDrawerOpen.value = true
+  }
+
 </script>
 
 <template>
   <ul class="menu bg-base-200 w-56 rounded-box">
     <li v-for="team in teams" :key="team.id">
-      {{ team.name }} <button @click="removeTeam(team.id)">Remove team</button>
+      <div>{{ team.name }}</div> 
+      <div className="flex">
+        <button @click="openTeamUpdateDrawer(team)" class="btn btn-accent">Edit Team</button>
+        </div>
+        <div className="flex">
+        <button @click="removeTeam(team.id)">Remove team</button>
+      </div>
     </li>
   </ul>
+  <Drawer v-model="isUpdateTeamDrawerOpen" #default="{ closeModal }">
+       <TeamsForm :editingTeam="selectedTeam" :closeModal="closeModal"/>
+  </Drawer>
 </template>

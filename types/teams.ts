@@ -10,6 +10,9 @@ export  interface TeamStoreState {
   }
   
 export interface TeamStoreActions {
-    addTeam: (team: Team) => void
-    removeTeam: (id: number) => void
+    updateTeam: (id: number, data: { name: string }) => void
+    deleteTeam: (id: number) => void
+    createTeam: (data:any) => void
+    getAllTeams: any
+    getTeamById: (id: number) => Promise<Team>
   }

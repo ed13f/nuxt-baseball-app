@@ -1,6 +1,4 @@
-// import { db } from '@/server/db'
 import { db, teams } from '../../db'
-// import { teams } from '@/server/db/schema'
 import { eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {

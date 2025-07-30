@@ -1,29 +1,63 @@
-
-
 <script setup lang="ts">
-import { computed } from "vue"
+import { ref, watch } from 'vue'
 
 const props = defineProps<{
-  buttonText: string
+  buttonText?: string
+  modelValue: boolean
 }>()
 
-const buttonId = computed(() =>
-  props.buttonText.toLowerCase().replace(/\s+/g, '-')
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void
+}>()
+
+// Unique ID to allow multiple drawers on the same page
+const buttonId = `drawer-${Math.random().toString(36).slice(2, 8)}`
+const modalToggle = ref<HTMLInputElement | null>(null)
+
+// Watch external modelValue and sync toggle checkbox
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (modalToggle.value) {
+      modalToggle.value.checked = val
+    }
+  },
+  { immediate: true }
 )
 
+// Emit back to parent when checkbox is clicked manually
+const onChange = () => {
+  if (modalToggle.value) {
+    emit('update:modelValue', modalToggle.value.checked)
+  }
+}
+
+function closeModal() {
+  emit('update:modelValue', false)
+}
 </script>
 
 <template>
-    <div className="drawer drawer-end">
-        <input :id="buttonId" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content">
-            <label :htmlFor="buttonId" className="drawer-button btn btn-primary">{{ buttonText }}</label>
-        </div>
-        <div className="drawer-side">
-            <label :htmlFor="buttonId" aria-label="close sidebar" className="drawer-overlay"></label>
-            <div className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-                <slot />
-            </div>
-        </div>
+  <div class="drawer drawer-end">
+    <input
+      :id="buttonId"
+      type="checkbox"
+      class="drawer-toggle"
+      ref="modalToggle"
+      @change="onChange"
+    />
+
+    <div v-if="buttonText" class="drawer-content">
+      <label :for="buttonId" class="drawer-button btn btn-primary">
+        {{ buttonText }}
+      </label>
     </div>
+
+    <div class="drawer-side">
+      <label :for="buttonId" class="drawer-overlay" />
+      <div class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+        <slot :closeModal="closeModal" />
+      </div>
+    </div>
+  </div>
 </template>

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-// import { useUserStore } from '../../../stores/user'
 import { useUserStore } from '../../stores/user'
 
 const user = useUserStore()
-console.log('user: ', user)
 </script>
 
 <template>
@@ -17,13 +15,7 @@ console.log('user: ', user)
       <Drawer buttonText="Add Player">
         <PlayersProfileForm />
       </Drawer>
-      <Drawer buttonText="Add Team">
-        <TeamsCreateForm />
-      </Drawer>
       <TeamsList />
     </SectionsFullWidth>
-    
-    
-    
   </div>
 </template>
