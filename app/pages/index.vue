@@ -11,11 +11,7 @@ const user = useUserStore()
   </div>
   <div v-if="user.isLoggedIn">
     <SectionsFullWidth>
-      <h1>{{ user.name }}'s' Profile Page</h1>
-      <Drawer buttonText="Add Player">
-        <PlayersProfileForm />
-      </Drawer>
-      <TeamsList />
+      <h1>{{ user.name }}'s' Profile Page: Index Page</h1>
     </SectionsFullWidth>
   </div>
 </template>

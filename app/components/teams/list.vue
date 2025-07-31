@@ -17,6 +17,7 @@
       } catch (err: any) {
         err.value = err?.data?.message || 'Error getting teams'
       }
+      // console.log("teams: ", teams)
   })
 
   const removeTeam = async (id: number) => {
@@ -26,8 +27,6 @@
 
   function openTeamUpdateDrawer(team: Team) {
     selectedTeam.value = team
-    console.log(team)
-    console.log('selectedTeam: ',selectedTeam.value);
     isUpdateTeamDrawerOpen.value = true
   }
 
