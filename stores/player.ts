@@ -6,7 +6,7 @@ export const usePlayerStore = defineStore<'player', PlayerStoreState, {}, Player
     players: [] as Player[],
   }),
   actions: {
-    async createPlayer(data:any) {
+    async createPlayer(data:Player) {
       try {
         const newPlayer = await $fetch('/api/players/create', {
           method: 'POST',
@@ -48,7 +48,6 @@ export const usePlayerStore = defineStore<'player', PlayerStoreState, {}, Player
     async getAllPlayers() {
       try {
         const players = await $fetch<Player[]>('/api/players/get-all')
-        console.log('ricos players: ', players)
         this.players = players
         return players
       } catch (err: any) {
@@ -61,7 +60,6 @@ export const usePlayerStore = defineStore<'player', PlayerStoreState, {}, Player
           method: 'PUT',
           body: data
         })
-        console.log('testPlayer: ', player)
         const index = this.players.findIndex(t => t.id === id)
         if (index !== -1) {
           this.players[index] = player // ✅ replace the existing player

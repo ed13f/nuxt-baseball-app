@@ -5,7 +5,7 @@
 
   const { deletePlayer, getAllPlayers } = usePlayerStore()
 
-  const players = ref<Player[]>([])
+  const players = ref([])
   const selectedPlayer = ref<Player | null>(null)
 
   const isUpdatePlayerDrawerOpen = ref(false)
@@ -25,6 +25,7 @@
 
   function openPlayerUpdateDrawer(player: Player) {
     selectedPlayer.value = player
+
     isUpdatePlayerDrawerOpen.value = true
   }
 
@@ -42,7 +43,7 @@
       </div>
     </li>
   </ul>
-  <Drawer v-model="isUpdatePlayerDrawerOpen" #default="{ closeModal }">
+  <GlobalDrawer v-model="isUpdatePlayerDrawerOpen" #default="{ closeModal }">
        <PlayersForm :editingPlayer="selectedPlayer" :closeModal="closeModal"/>
-  </Drawer>
+  </GlobalDrawer>
 </template>

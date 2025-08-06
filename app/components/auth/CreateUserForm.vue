@@ -14,7 +14,6 @@
     const submit = async () => {
         error.value = null
         success.value = false
-        console.log('yeahhhh: ', name.value)
         
         try {
             await $fetch('/api/users/post', {

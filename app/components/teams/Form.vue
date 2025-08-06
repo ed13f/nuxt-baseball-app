@@ -56,7 +56,6 @@ const submit = async (closeModal: () => void) => {
 </script>
 
 <template>
-  <!-- <Drawer :buttonText="isEditing ? 'Edit Team' : 'Add Team'" v-slot="{ closeModal }"> -->
     <div class="max-w-md mx-auto p-6 space-y-4">
       <h1 class="text-2xl font-bold">{{ isEditing ? 'Edit Team' : 'Add a Team' }}</h1>
 
@@ -73,5 +72,4 @@ const submit = async (closeModal: () => void) => {
       <p v-if="success" class="text-green-600">✅ Success!</p>
       <p v-if="error" class="text-red-600">❌ {{ error }}</p>
     </div>
-  <!-- </Drawer> -->
 </template>

@@ -6,7 +6,6 @@ import * as schema from './schema'
 
 // Get absolute path to DB file
 const dbPath = resolve(process.env.DB_FILE_NAME || 'data/sqlite.db')
-console.log('✅ Nuxt is using this DB:', dbPath)
 
 // Ensure directory exists
 const dbDir = dirname(dbPath)
@@ -17,8 +16,11 @@ if (!existsSync(dbDir)) {
 // Now safely create the database
 const sqlite = new Database(dbPath)
 export const db = drizzle(sqlite, { schema })
-export const { users } = schema
+export const { users, games } = schema
 export const { players } = schema
 export const { teams } = schema
+export const { teamPlayers } = schema
+export const { fieldPositions } = schema
+
 
 

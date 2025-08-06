@@ -17,7 +17,6 @@
       } catch (err: any) {
         err.value = err?.data?.message || 'Error getting teams'
       }
-      // console.log("teams: ", teams)
   })
 
   const removeTeam = async (id: number) => {
@@ -44,7 +43,7 @@
       </div>
     </li>
   </ul>
-  <Drawer v-model="isUpdateTeamDrawerOpen" #default="{ closeModal }">
+  <GlobalDrawer v-model="isUpdateTeamDrawerOpen" #default="{ closeModal }">
        <TeamsForm :editingTeam="selectedTeam" :closeModal="closeModal"/>
-  </Drawer>
+  </GlobalDrawer>
 </template>

@@ -3,7 +3,9 @@ import type { Team, TeamStoreState, TeamStoreActions } from '../types/teams'
 
 export const useTeamStore = defineStore<'team', TeamStoreState, {}, TeamStoreActions>('team', {
   state: (): TeamStoreState => ({
-    managedTeams: [] as Team[],
+    selectedTeamId: null,
+    allTeams: [] as Team[],
+    teamPlayers: [] as Player[],
   }),
   actions: {
     async createTeam(data:any) {
@@ -12,9 +14,9 @@ export const useTeamStore = defineStore<'team', TeamStoreState, {}, TeamStoreAct
           method: 'POST',
           body: data,
       })
-      const exists = this.managedTeams.find(t => t.id === newTeam.id)
+      const exists = this.allTeams.find(t => t.id === newTeam.id)
       if (!exists) {
-        this.managedTeams.push(newTeam)
+        this.allTeams.push(newTeam)
       }
         return newTeam
       } catch (err: any) {
@@ -25,8 +27,8 @@ export const useTeamStore = defineStore<'team', TeamStoreState, {}, TeamStoreAct
       try {
         const team = await $fetch<Team>(`/api/teams/${id}`)
     
-        const existingIndex = this.managedTeams.findIndex(t => t.id === id)
-        const existingTeam = this.managedTeams[existingIndex]
+        const existingIndex = this.allTeams.findIndex(t => t.id === id)
+        const existingTeam = this.allTeams[existingIndex]
     
         // Only update if the team is missing or changed
         if (
@@ -34,9 +36,9 @@ export const useTeamStore = defineStore<'team', TeamStoreState, {}, TeamStoreAct
           JSON.stringify(existingTeam) !== JSON.stringify(team)
         ) {
           if (existingIndex !== -1) {
-            this.managedTeams[existingIndex] = team
+            this.allTeams[existingIndex] = team
           } else {
-            this.managedTeams.push(team)
+            this.allTeams.push(team)
           }
         }
     
@@ -48,7 +50,7 @@ export const useTeamStore = defineStore<'team', TeamStoreState, {}, TeamStoreAct
     async getAllTeams() {
       try {
         const teams = await $fetch<Team[]>('/api/teams/get-all')
-        this.managedTeams = teams
+        this.allTeams = teams
         return teams
       } catch (err: any) {
         throw new Error(err?.data?.message || 'Error getting teams')
@@ -60,9 +62,9 @@ export const useTeamStore = defineStore<'team', TeamStoreState, {}, TeamStoreAct
           method: 'PUT',
           body: data
         })
-        const index = this.managedTeams.findIndex(t => t.id === id)
+        const index = this.allTeams.findIndex(t => t.id === id)
         if (index !== -1) {
-          this.managedTeams[index] = team // ✅ replace the existing team
+          this.allTeams[index] = team // ✅ replace the existing team
         } 
         } catch (err: any) {
           throw new Error(err?.data?.message || 'Error getting teams')
@@ -73,9 +75,40 @@ export const useTeamStore = defineStore<'team', TeamStoreState, {}, TeamStoreAct
         await $fetch(`/api/teams/${id}`, {
           method: 'DELETE'
         })
-        this.managedTeams = this.managedTeams.filter(team => team.id !== id)
+        this.allTeams = this.allTeams.filter(team => team.id !== id)
       } catch (err: any) {
         throw new Error(err?.data?.message || 'Error deleting team')
+      }
+    },
+    async addTeamPlayer(teamId: number, playerId: number) {
+      try {
+        await $fetch('/api/teams/add-player', {
+          method: 'POST',
+          body: { teamId, playerId },
+        })
+      } catch (err: any) {
+        throw new Error(err?.data?.message || 'Error stor function')
+      }
+    },
+    async removeTeamPlayer(teamId: number, playerId: number) {
+      try {
+        await $fetch('/api/teams/remove-player', {
+          method: 'DELETE',
+          body: { teamId, playerId },
+        })
+      } catch (err: any) {
+        throw new Error(err?.data?.message || 'Error removing player from team')
+      }
+    },
+    async getTeamPlayers(teamId: number): Promise<Player[]> {
+      try {
+        const players = await $fetch<Player[]>(`/api/teams/${teamId}/players`)
+        this.selectedTeamId = teamId
+        this.teamPlayers = players
+        return players
+      } catch (err: any) {
+        console.error('Failed to fetch players:', err)
+        throw new Error(err?.data?.message || 'Failed to fetch players for team')
       }
     }
   },

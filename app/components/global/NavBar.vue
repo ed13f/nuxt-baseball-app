@@ -1,11 +1,10 @@
 <script setup lang="ts">
 // import { useUserStore } from '/stores/user';
-import { useUserStore } from '../../stores/user'
+import { useUserStore } from '../../../stores/user'
 
 const user = useUserStore()
 
 const handleLogin = () => {
-  console.log('loggedIn');
   // @ts-ignore
   user.login('Alice1', 'alice@example.com')
 }

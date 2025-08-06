@@ -14,4 +14,6 @@ const user = useUserStore()
       <h1>{{ user.name }}'s' Profile Page: Index Page</h1>
     </SectionsFullWidth>
   </div>
+
+  
 </template>

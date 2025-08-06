@@ -2,6 +2,7 @@ export interface Player {
     id: number
     name: string
     email:string
+    primaryPositionId:number | null
     age: string
     height: string
     weight: string
@@ -10,13 +11,13 @@ export interface Player {
   }
   
 export  interface PlayerStoreState {
-    managedTeams: Player[]
+  players: Player[]
   }
   
 export interface PlayerStoreActions {
     updatePlayer: (id: number, data: { name: string, email:string, age: number, height: string, weight: string }) => void
     deletePlayer: (id: number) => void
     createPlayer: (data:any) => void
-    getAllPlayers: any
+    getAllPlayers: () Promise<Player>[]
     getPlayerById: (id: number) => Promise<Player>
   }

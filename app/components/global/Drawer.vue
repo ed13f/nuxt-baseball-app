@@ -46,6 +46,7 @@ function closeModal() {
       ref="modalToggle"
       @change="onChange"
     />
+    
 
     <div v-if="buttonText" class="drawer-content">
       <label :for="buttonId" class="drawer-button btn btn-primary">
@@ -55,7 +56,14 @@ function closeModal() {
 
     <div class="drawer-side">
       <label :for="buttonId" class="drawer-overlay" />
-      <div class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+      <div class="menu bg-base-200 text-base-content min-h-full w-80 p-4 pt-13 relative">
+        <button
+          class=" btn-sm btn-circle bg-red-600 hover:bg-red-700 text-white absolute top-2 right-2"
+          @click="closeModal"
+          aria-label="Close drawer"
+        >
+          ✕
+        </button>
         <slot :closeModal="closeModal" />
       </div>
     </div>

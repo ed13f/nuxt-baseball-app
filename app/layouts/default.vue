@@ -1,7 +1,7 @@
 
 <template>
     <main>
-        <navBar/>
+        <GlobalNavBar/>
         <slot />
     </main>
 </template>

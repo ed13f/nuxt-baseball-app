@@ -19,7 +19,6 @@ function openPlayerDrawer() {
 
 <template>
   <div v-if="!user.isLoggedIn">
-    <AuthCreateUserForm />
   </div>
   <div v-if="user.isLoggedIn">
    <SectionsTwoColumnSidebar>
@@ -34,13 +33,13 @@ function openPlayerDrawer() {
       <template #sidebar>
         <h1>{{ `${user.name}'s Profile Page` }}</h1>
         <button @click="openTeamDrawer" class="btn btn-accent">Create Team</button>
-        <Drawer v-model="isAddTeamFormOpen" #default="{ closeModal }">
+        <GlobalDrawer v-model="isAddTeamFormOpen" #default="{ closeModal }">
           <TeamsForm :closeModal="closeModal"/>
-        </Drawer>
+        </GlobalDrawer>
         <button @click="openPlayerDrawer" class="btn btn-accent">Create Player</button>
-        <Drawer v-model="isAddPlayerFormOpen" #default="{ closeModal }">
+        <GlobalDrawer v-model="isAddPlayerFormOpen" #default="{ closeModal }">
           <PlayersForm :closeModal="closeModal" />
-        </Drawer>
+        </GlobalDrawer>
       </template>
     </SectionsTwoColumnSidebar>
   </div>

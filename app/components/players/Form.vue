@@ -1,90 +1,12 @@
-<!-- <script setup lang="ts">
-    import { ref } from 'vue'
-    import { $fetch } from 'ofetch'
-
-    const name = ref('')
-    const email = ref('')
-    const age = ref<number | null>(null)
-    const height = ref('')
-    const weight = ref('')
-
-    const success = ref(false)
-    const error = ref<string | null>(null)
-
-    const submit = async () => {
-        error.value = null
-        success.value = false
-        
-        try {
-            await $fetch('/api/players/create', {
-            method: 'POST',
-            body: {
-                name: name.value,
-                email: email.value,
-                age: age.value,
-                height: height.value,
-                weight: weight.value,
-            },
-            })
-            success.value = true
-            
-            name.value = ''
-            email.value = ''
-            age.value = null
-            height.value = ''
-            weight.value = ''
-        } catch (err: any) {
-            error.value = err?.data?.message || 'Error adding user'
-        }
-    }
-</script>
-
-<template>
-  <div class="max-w-md mx-auto p-6 space-y-4">
-    <h1 class="text-2xl font-bold">Add a Player Profile</h1>
-    <input
-      v-model="name"
-      class="input input-bordered w-full"
-      placeholder="Name"
-    />
-    <input
-      v-model="email"
-      class="input input-bordered w-full"
-      placeholder="Email"
-    />
-    <input
-      v-model="age"
-      type="number"
-      class="input input-bordered w-full"
-      placeholder="Age"
-    />
-    <input
-      v-model="height"
-      class="input input-bordered w-full"
-      placeholder="Height"
-    />
-    <input
-      v-model="weight"
-      class="input input-bordered w-full"
-      placeholder="Weight"
-    />
-
-    <button @click="submit" class="btn btn-primary w-full">Add Player</button>
-
-    <p v-if="success" class="text-green-600">✅ Player added!</p>
-    <p v-if="error" class="text-red-600">❌ {{ error }}</p>
-  </div>
-</template> -->
-
-
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { $fetch } from 'ofetch'
 import { usePlayerStore } from '../../../stores/player'
 
 // Props
 const props = defineProps<{
   closeModal: () => void
-  editingPlayer?: { id: number; name: string; email: string; age: number; height: string; weight: string } | null
+  editingPlayer?: { id: number; name: string; email: string; primaryPositionId: number | null, age: number; height: string; weight: string } | null
 }>()
 
 // Emits (optional, for parent update)
@@ -94,10 +16,13 @@ const { updatePlayer, createPlayer } = usePlayerStore()
 
 const name = ref('')
 const email = ref('')
+const positions = ref<{ id: number; name: string }[]>([])
+const primaryPositionId = ref<number | null>(null)
 const age = ref<number | null>(null)
 const height = ref('')
 const weight = ref('')
 const isEditing = ref(false)
+
 
 const success = ref(false)
 const error = ref<string | null>(null)
@@ -109,6 +34,7 @@ watch(
     if (player) {
       name.value = player.name
       email.value = player.email
+      primaryPositionId.value = player.primaryPositionId
       age.value = player.age
       height.value = player.height
       weight.value = player.weight
@@ -116,6 +42,7 @@ watch(
     } else {
       name.value = ''
       email.value = ''
+      primaryPositionId.value = null
       age.value = 0
       height.value = ''
       weight.value = ''
@@ -133,16 +60,18 @@ const submit = async (closeModal: () => void) => {
      const player =  await updatePlayer(props.editingPlayer.id, { 
       name: name.value, 
       email: email.value,
+      // @ts-ignore
+      primaryPositionId: primaryPositionId.value,
       age: age.value,
       height: height.value, 
       weight: weight.value 
     })
 
-     console.log('playerrrrr: ', player);
     } else {
       await createPlayer({ 
         name: name.value, 
         email: email.value, 
+        primaryPositionId: primaryPositionId.value,
         age: age.value, 
         height: height.value, 
         weight: weight.value 
@@ -157,10 +86,18 @@ const submit = async (closeModal: () => void) => {
     error.value = err?.data?.message || 'Error saving player?'
   }
 }
+
+onMounted(async () => {
+  try {
+    positions.value = await $fetch('/api/field-positions/all')
+  } catch (err) {
+    console.error('Failed to fetch field positions:', err)
+  }
+})
+
 </script>
 
 <template>
-  <!-- <Drawer :buttonText="isEditing ? 'Edit player' : 'Add player'" v-slot="{ closeModal }"> -->
     <div class="max-w-md mx-auto p-6 space-y-4">
       <h1 class="text-2xl font-bold">{{ isEditing ? 'Edit player' : 'Add a player' }}</h1>
       <input
@@ -173,6 +110,12 @@ const submit = async (closeModal: () => void) => {
         class="input input-bordered w-full"
         placeholder="Email"
       />
+      <select v-model="primaryPositionId" class="select select-bordered w-full">
+        <option disabled value="">Select a position</option>
+        <option v-for="pos in positions" :key="pos.id" :value="pos.id">
+          {{ pos.name }}
+        </option>
+      </select>
       <input
         v-model="age"
         type="number"
@@ -197,6 +140,5 @@ const submit = async (closeModal: () => void) => {
       <p v-if="success" class="text-green-600">✅ Success!</p>
       <p v-if="error" class="text-red-600">❌ {{ error }}</p>
     </div>
-  <!-- </Drawer> -->
 </template>
 
