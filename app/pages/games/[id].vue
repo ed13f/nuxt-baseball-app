@@ -19,7 +19,8 @@ onMounted(async () => {
 
     // Fetch game details
     game.value = await gameStore.getGameById(gameId)
-
+    // console.log('away: ', game.value.awayTeamId);
+    // console.log('home: ', game.value.homeTeamId);
     // Optionally: preload teams if not already in store
     if (teamStore.allTeams.length === 0) {
       await teamStore.getAllTeams()
@@ -59,12 +60,15 @@ const getTeamName = (teamId: number) => {
     <div v-else>No game found.</div>
   </div>
 </SectionsFullWidth>
-<SectionsTwoColumnsEven>
+<GamesTeamRoster v-if="game" :game="game" />
+<!-- <SectionsTwoColumnsEven>
     <template #columnOne>
-      Away Team
+      <h2>Away Team</h2>
+      <GamesTeamRoster v-if="game?.awayTeamId" :teamId="game.awayTeamId" />
     </template>
     <template #columnTwo>
-      Home Team
+      <h2>Home Team</h2>
+      <TeamsPlayersList v-if="game?.homeTeamId" :teamId="game.homeTeamId" />
     </template>
-  </SectionsTwoColumnsEven>
+  </SectionsTwoColumnsEven> -->
 </template>

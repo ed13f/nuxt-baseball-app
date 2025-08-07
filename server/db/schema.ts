@@ -46,7 +46,7 @@ export const gamePlayers = sqliteTable('game_players', {
     playerId: int('player_id').notNull(),
     teamId: int('team_id').notNull(),
     positionId: int("position_id").references(() => fieldPositions.id),
-    battingOrderNumber: int('batting_order_number').notNull(),
+    battingOrderNumber: int('batting_order_number'),
     createdAt: int('created_at', { mode: 'timestamp' }).notNull(),
     updatedAt: int('updated_at', { mode: 'timestamp' }).notNull(),
 })

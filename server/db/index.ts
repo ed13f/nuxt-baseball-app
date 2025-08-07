@@ -21,6 +21,7 @@ export const { players } = schema
 export const { teams } = schema
 export const { teamPlayers } = schema
 export const { fieldPositions } = schema
+export const { gamePlayers } = schema
 
 
 

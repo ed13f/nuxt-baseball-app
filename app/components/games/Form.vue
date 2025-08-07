@@ -80,7 +80,7 @@ const submit = async (closeModal: () => void) => {
     success.value = true
     closeModal()
     emit('updated')
-    router.push(`/games/${newGame.id}`)
+    // router.push(`/games/${newGame.id}`)
   } catch (err: any) {
     error.value = err?.data?.message || 'Error saving game'
   }
