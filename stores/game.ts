@@ -50,7 +50,7 @@ export const useGameStore = defineStore<'game', GameStoreState, {}, GameStoreAct
         throw new Error(err?.data?.message || 'Error fetching home Team')
       }
     },
-    async getHomePlayersRoster(teamId: number): Promise<Player[]> {
+    async setHomePlayersRoster(teamId: number): Promise<Player[]> {
       try {
         const players = await $fetch<Player[]>(`/api/teams/${teamId}/players`)
         return players
@@ -59,9 +59,27 @@ export const useGameStore = defineStore<'game', GameStoreState, {}, GameStoreAct
         throw new Error(err?.data?.message || 'Failed to fetch players for team')
       }
     },
-    async getAwayPlayersRoster(teamId: number): Promise<Player[]> {
+    async getHomePlayersRoster(gameId: number, teamId: number): Promise<Player[]> {
+      try {
+        const players = await $fetch<Player[]>(`/api/game-players/${gameId}/teams/${teamId}/players`)
+        return players
+      } catch (err: any) {
+        console.error('Failed to fetch players:', err)
+        throw new Error(err?.data?.message || 'Failed to fetch players for team')
+      }
+    },
+    async setAwayPlayersRoster(teamId: number): Promise<Player[]> {
       try {
         const players = await $fetch<Player[]>(`/api/teams/${teamId}/players`)
+        return players
+      } catch (err: any) {
+        console.error('Failed to fetch players:', err)
+        throw new Error(err?.data?.message || 'Failed to fetch players for team')
+      }
+    },
+    async getAwayPlayersRoster(gameId: number,teamId: number): Promise<Player[]> {
+      try {
+        const players = await $fetch<Player[]>(`/api/game-players/${gameId}/teams/${teamId}/players`)
         return players
       } catch (err: any) {
         console.error('Failed to fetch players:', err)
@@ -80,8 +98,8 @@ export const useGameStore = defineStore<'game', GameStoreState, {}, GameStoreAct
           method: 'POST',
           body: data,
         })
-        const homeRoster = await this.getHomePlayersRoster(data.homeTeamId)
-        const awayRoster = await this.getAwayPlayersRoster(data.awayTeamId)
+        const homeRoster = await this.setHomePlayersRoster(data.homeTeamId)
+        const awayRoster = await this.setAwayPlayersRoster(data.awayTeamId)
         for (const [index, player] of homeRoster.entries()) {
           try {
             await $fetch('/api/game-players/create', {
@@ -149,6 +167,31 @@ export const useGameStore = defineStore<'game', GameStoreState, {}, GameStoreAct
       } catch (err: any) {
         throw new Error(err?.data?.message || 'Error deleting game')
       }
+    },
+    async updatePlayerPosition({
+      playerId,
+      gameId,
+      teamId,
+      positionId,
+    }: {
+      playerId: number
+      gameId: number
+      teamId: number
+      positionId: number
+    }) {
+      try {
+      await $fetch('/api/game-players/update-player-position', {
+        method: 'POST',
+        body: {
+          playerId,
+          gameId,
+          teamId,
+          positionId,
+        },
+      })
+    } catch (err: any) {
+      throw new Error(err?.data?.message || 'Error changing position')
+    }
     },
   },
 })

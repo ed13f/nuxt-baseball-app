@@ -54,7 +54,7 @@ export const usePlayerStore = defineStore<'player', PlayerStoreState, {}, Player
         throw new Error(err?.data?.message || 'Error getting players')
       }
     },
-    async updatePlayer(id: number, data: { name: string, email: string, age: number, height: string, weight: string }) {
+    async updatePlayer(id: number, data: { name: string, email: string, position_id: number, age: number, height: string, weight: string }) {
       try {
         const player = await $fetch(`/api/players/${id}`, {
           method: 'PUT',
@@ -77,7 +77,7 @@ export const usePlayerStore = defineStore<'player', PlayerStoreState, {}, Player
       } catch (err: any) {
         throw new Error(err?.data?.message || 'Error deleting player')
       }
-    }
+    },
   },
   persist: true, 
 })

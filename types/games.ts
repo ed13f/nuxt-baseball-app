@@ -10,7 +10,6 @@ export type Game = {
     updatedAt: number
   }
 
-
   export  interface GameStoreState {
     games: Game[]
     homeTeam: Team
@@ -21,5 +20,10 @@ export type Game = {
     setHomeTeamById:(id: number)
     getHomePlayersRoster(id: number)
     getAwayPlayersRoster(id: number)
+    updatePlayerPosition({
+      playerId: number,
+      gameId: number,
+      teamId: number,
+      positionId: number})
   }
   

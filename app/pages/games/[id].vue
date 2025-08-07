@@ -19,8 +19,7 @@ onMounted(async () => {
 
     // Fetch game details
     game.value = await gameStore.getGameById(gameId)
-    // console.log('away: ', game.value.awayTeamId);
-    // console.log('home: ', game.value.homeTeamId);
+    
     // Optionally: preload teams if not already in store
     if (teamStore.allTeams.length === 0) {
       await teamStore.getAllTeams()

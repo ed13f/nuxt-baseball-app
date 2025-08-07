@@ -57,7 +57,7 @@ const submit = async (closeModal: () => void) => {
   success.value = false
   try {
     if (isEditing.value && props.editingPlayer) {
-     const player =  await updatePlayer(props.editingPlayer.id, { 
+     await updatePlayer(props.editingPlayer.id, { 
       name: name.value, 
       email: email.value,
       // @ts-ignore

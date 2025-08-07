@@ -1,7 +1,6 @@
 import { db, fieldPositions } from './index'
 
 const now = new Date()
-console.log("running")
 const positions = [
   { name: 'Pitcher', number: 1, abbreviation: 'P' },
   { name: 'Catcher', number: 2, abbreviation: 'C' },
@@ -23,7 +22,6 @@ const positions = [
 async function seed() {
   try {
     await db.insert(fieldPositions).values(positions)
-    console.log('✅ Seeded field positions successfully.')
   } catch (error) {
     console.error('❌ Error seeding field positions:', error)
   }
